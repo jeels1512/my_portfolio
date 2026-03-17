@@ -365,6 +365,47 @@ if (composeEmailButton) {
   });
 }
 
+const resumeLinks = Array.from(document.querySelectorAll('[data-resume-link]'));
+const resumeEmbed = document.querySelector('[data-resume-embed]');
+const resumeFileCandidates = ['assets/Jeels-Patel-Resume.pdf', 'assets/Jeels_Resume.pdf'];
+
+const applyResumePath = (path) => {
+  const fileName = path.split('/').pop() || 'resume.pdf';
+
+  resumeLinks.forEach((link) => {
+    link.setAttribute('href', path);
+    if (link.hasAttribute('download')) {
+      link.setAttribute('download', fileName);
+    }
+  });
+
+  if (resumeEmbed) {
+    resumeEmbed.setAttribute('data', path);
+  }
+};
+
+const canFetchResume = async (path) => {
+  try {
+    const response = await fetch(path, { method: 'HEAD', cache: 'no-store' });
+    return response.ok;
+  } catch {
+    return false;
+  }
+};
+
+if (resumeLinks.length > 0 || resumeEmbed) {
+  void (async () => {
+    for (const path of resumeFileCandidates) {
+      if (await canFetchResume(path)) {
+        applyResumePath(path);
+        return;
+      }
+    }
+
+    applyResumePath(resumeFileCandidates[0]);
+  })();
+}
+
 const year = document.getElementById('year');
 if (year) {
   year.textContent = String(new Date().getFullYear());
