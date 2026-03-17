@@ -368,6 +368,8 @@ if (composeEmailButton) {
 const resumeLinks = Array.from(document.querySelectorAll('[data-resume-link]'));
 const resumeEmbed = document.querySelector('[data-resume-embed]');
 const resumeFileCandidates = ['assets/Jeels-Patel-Resume.pdf', 'assets/Jeels_Resume.pdf'];
+const resumePreviewImage = document.querySelector('.resume-preview-image');
+const resumePreviewSurface = document.querySelector('.resume-download-surface');
 
 const applyResumePath = (path) => {
   const fileName = path.split('/').pop() || 'resume.pdf';
@@ -380,7 +382,7 @@ const applyResumePath = (path) => {
   });
 
   if (resumeEmbed) {
-    resumeEmbed.setAttribute('data', path);
+    resumeEmbed.setAttribute('data', `${path}#toolbar=0&navpanes=0&scrollbar=0`);
   }
 };
 
@@ -404,6 +406,18 @@ if (resumeLinks.length > 0 || resumeEmbed) {
 
     applyResumePath(resumeFileCandidates[0]);
   })();
+}
+
+if (resumePreviewImage && resumePreviewSurface) {
+  const switchToPdfFallback = () => {
+    resumePreviewSurface.classList.add('use-pdf-fallback');
+  };
+
+  resumePreviewImage.addEventListener('error', switchToPdfFallback, { once: true });
+
+  if (resumePreviewImage.complete && resumePreviewImage.naturalWidth === 0) {
+    switchToPdfFallback();
+  }
 }
 
 const year = document.getElementById('year');
