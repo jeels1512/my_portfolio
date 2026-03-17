@@ -77,8 +77,6 @@
                 class="btn btn-secondary"
                 href="assets/Jeels-Patel-Resume.pdf"
                 download="Jeels-Patel-Resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
                 data-resume-link
                 data-resume-download
               >
@@ -336,48 +334,23 @@
 
             <article class="card brick-red tile tile-resume" id="resume">
               <h3>Resume Blueprint</h3>
-              <object
-                data="assets/Jeels-Patel-Resume.pdf"
-                type="application/pdf"
-                class="resume-frame"
-                data-resume-embed
+              <a
+                class="resume-download-surface"
+                href="assets/Jeels-Patel-Resume.pdf"
+                download="Jeels-Patel-Resume.pdf"
+                data-resume-link
+                data-resume-download
+                aria-label="Download Jeels Patel resume PDF"
               >
-                <p>
-                  Resume preview is unavailable in this browser.
-                  <a
-                    href="assets/Jeels-Patel-Resume.pdf"
-                    download="Jeels-Patel-Resume.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-resume-link
-                    data-resume-download
-                  >
-                    Download the PDF instead.
-                  </a>
-                </p>
-              </object>
-              <div class="resume-actions">
-                <a
-                  class="btn btn-primary"
-                  href="assets/Jeels-Patel-Resume.pdf"
-                  download="Jeels-Patel-Resume.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-resume-link
-                  data-resume-download
-                >
-                  Download Resume
-                </a>
-                <a
-                  class="btn btn-secondary"
-                  href="assets/Jeels-Patel-Resume.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-resume-link
-                >
-                  Open Resume
-                </a>
-              </div>
+                <img
+                  class="resume-preview-image"
+                  src="assets/Jeels-Patel-Resume-preview.png"
+                  alt="Preview of Jeels Patel resume"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span class="resume-download-hint">Click Resume To Download</span>
+              </a>
             </article>
 
             <article class="card brick-orange tile tile-experience" id="experience">
