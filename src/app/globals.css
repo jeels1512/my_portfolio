@@ -1,0 +1,185 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Phosphor Recon — design tokens
+   ============================================================ */
+:root {
+  --ink: #0b0e11;
+  --ink-raise: #12161b;
+  --line: #232a31;
+  --phosphor: #ffb454;
+  --phosphor-dim: #8a6430;
+  --signal: #5fd7a7;
+  --text: #e8e6e1;
+  --text-dim: #9ba3ab;
+  --danger: #e06c60;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Light "paper" variant — toggled via the palette `theme` command */
+:root[data-theme="paper"] {
+  --ink: #f2eee6;
+  --ink-raise: #e8e2d6;
+  --line: #d2c8b6;
+  --phosphor: #b26a00;
+  --phosphor-dim: #a8874a;
+  --signal: #1f9d6a;
+  --text: #1a1712;
+  --text-dim: #5c564c;
+  --danger: #c0463a;
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-ink-raise: var(--ink-raise);
+  --color-line: var(--line);
+  --color-phosphor: var(--phosphor);
+  --color-phosphor-dim: var(--phosphor-dim);
+  --color-signal: var(--signal);
+  --color-text: var(--text);
+  --color-text-dim: var(--text-dim);
+  --color-danger: var(--danger);
+
+  --font-display: var(--font-space-grotesk);
+  --font-body: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+}
+
+* {
+  border-color: var(--line);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--ink);
+  color: var(--text);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-feature-settings: "ss01";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ---- Mono eyebrow / label convention ---- */
+.mono-label {
+  font-family: var(--font-mono), monospace;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--phosphor-dim);
+}
+
+/* ---- Focus rings ---- */
+:focus-visible {
+  outline: 2px solid var(--phosphor);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ---- CRT scanline + vignette overlay ---- */
+.crt-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 180, 84, 0.03) 0px,
+    rgba(255, 180, 84, 0.03) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+}
+.crt-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.28) 100%);
+}
+
+@media (max-width: 768px) {
+  .crt-overlay {
+    display: none;
+  }
+}
+
+/* hover inner glow */
+.inner-glow-hover:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 180, 84, 0.06);
+}
+
+/* status dot pulse */
+@keyframes phosphor-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 currentColor;
+  }
+  50% {
+    opacity: 0.55;
+    box-shadow: 0 0 6px 0 currentColor;
+  }
+}
+.pulse-dot {
+  animation: phosphor-pulse 2s var(--ease) infinite;
+}
+
+/* ---- Reduced motion: strip everything decorative ---- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .crt-overlay {
+    display: none !important;
+  }
+  .pulse-dot {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* selection */
+::selection {
+  background: var(--phosphor);
+  color: var(--ink);
+}
+
+/* thin scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ink);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--phosphor-dim);
+}
