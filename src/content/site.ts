@@ -12,31 +12,37 @@ export const site = {
     github: "https://github.com/jeels1512",
     githubHandle: "github.com/jeels1512",
     linkedin: "https://www.linkedin.com/in/jeels-patel",
-    linkedinHandle: "in/jeels-patel",
+    linkedinHandle: "linkedin.com/in/jeels-patel",
   },
 
   hero: {
-    eyebrow: "~/recon · target acquired",
-    nameLine: "Jeels Patel",
-    tagline: "breaks things to learn how they're secured.",
-    sub: "Cybersecurity student focused on offensive security and cloud pentesting — building skills through hands-on labs, CTFs, and real engagements. Toronto, ON.",
-    status: "seeking cloud-sec / pentest internships — 2026",
+    eyebrow: "Offensive Security · Cloud Pentesting",
+    name: "Jeels Patel",
+    tagline: "I break things to learn how they're secured.",
+    sub: "Cybersecurity student focused on offensive security and cloud pentesting — building real skills through hands-on labs, CTFs, and engagements.",
+    status: "Available for cloud-security / pentest internships — 2026",
   },
 
-  // ~/net closing section
+  // Short professional summary for the About section.
+  about: [
+    "I'm a cybersecurity student in Toronto working toward a career in offensive security and cloud penetration testing. My focus is practical: I spend my time in hands-on labs and CTFs, mapping how real systems are attacked so I can understand how they should be defended.",
+    "I build web applications too — not just to ship them, but to learn where authentication, input handling, and access control actually break. Understanding the stack from the inside is half of testing it well.",
+  ],
+
   contact: {
-    heading: "Open to cloud-sec & pentest internships.",
+    heading: "Let's talk security.",
+    sub: "I'm open to cloud-security and penetration-testing internships for 2026. The fastest way to reach me is email.",
   },
 } as const;
 
-// nav sections — order = scroll order; label is what shows in the nav (lowercase mono)
+// nav / scroll sections — order = scroll order.
 export const sections = [
-  { id: "labs", label: "labs", path: "~/labs" },
-  { id: "builds", label: "builds", path: "~/builds" },
-  { id: "skills", label: "skills", path: "~/skills" },
-  { id: "creds", label: "creds", path: "~/creds" },
-  { id: "log", label: "log", path: "~/log" },
-  { id: "net", label: "net", path: "~/net" },
+  { id: "about", label: "About", n: "01" },
+  { id: "labs", label: "Labs", n: "02" },
+  { id: "projects", label: "Projects", n: "03" },
+  { id: "skills", label: "Skills", n: "04" },
+  { id: "experience", label: "Experience", n: "05" },
+  { id: "contact", label: "Contact", n: "06" },
 ] as const;
 
 export type SectionId = (typeof sections)[number]["id"];

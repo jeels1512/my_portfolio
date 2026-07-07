@@ -2,28 +2,23 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { sections } from "@/content/site";
+import { sections, site } from "@/content/site";
 import { EASE } from "@/lib/motion";
-import { Command, Menu, X } from "./Icons";
+import { Menu, X, Download } from "./Icons";
 
 function goto(id: string) {
   window.dispatchEvent(new CustomEvent("app:goto", { detail: id }));
-  // fallback for reduced-motion (no Lenis listener)
   const el = document.getElementById(id);
   if (el && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     el.scrollIntoView({ block: "start" });
   }
 }
 
-function openPalette() {
-  window.dispatchEvent(new CustomEvent("app:palette"));
-}
-
 export function Nav() {
   const [active, setActive] = useState<string>(sections[0].id);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  // scroll-spy via IntersectionObserver
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -32,7 +27,7 @@ export function Nav() {
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
         if (visible[0]) setActive(visible[0].target.id);
       },
-      { rootMargin: "-40% 0px -55% 0px", threshold: [0, 0.25, 0.5, 1] },
+      { rootMargin: "-45% 0px -50% 0px", threshold: [0, 0.5, 1] },
     );
     sections.forEach((s) => {
       const el = document.getElementById(s.id);
@@ -41,7 +36,13 @@ export function Nav() {
     return () => observer.disconnect();
   }, []);
 
-  // lock scroll when mobile menu open
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => {
@@ -55,62 +56,65 @@ export function Nav() {
   };
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-line backdrop-blur-md">
-      <div className="absolute inset-0 -z-10 bg-ink/85" aria-hidden="true" />
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
+        scrolled ? "border-b border-line bg-bg/80 backdrop-blur-md" : "border-b border-transparent"
+      }`}
+    >
       <nav
-        className="mx-auto flex h-14 w-full max-w-5xl items-center justify-between px-6"
+        className="mx-auto flex h-16 w-full max-w-5xl items-center justify-between px-6"
         aria-label="Primary"
       >
         <button
           onClick={() => handleNav(sections[0].id)}
-          className="font-mono text-sm text-phosphor transition-opacity hover:opacity-80"
+          className="group flex items-center gap-2 text-sm font-semibold tracking-tight text-text"
         >
-          jp@recon:~
+          <span className="flex h-7 w-7 items-center justify-center rounded-md border border-line-strong font-mono text-[13px] text-accent transition-colors group-hover:border-accent">
+            JP
+          </span>
+          <span className="hidden sm:inline">{site.name}</span>
         </button>
 
         {/* desktop links */}
-        <div className="hidden items-center gap-6 md:flex">
-          <ul className="flex items-center gap-5">
-            {sections.map((s) => (
-              <li key={s.id}>
-                <button
-                  onClick={() => handleNav(s.id)}
-                  className={`relative font-mono text-[13px] transition-colors ${
-                    active === s.id ? "text-phosphor" : "text-text-dim hover:text-text"
-                  }`}
-                  aria-current={active === s.id ? "true" : undefined}
-                >
-                  {s.label}
-                  {active === s.id && (
-                    <motion.span
-                      layoutId="nav-underline"
-                      className="absolute -bottom-1 left-0 h-px w-full bg-phosphor"
-                      transition={{ duration: 0.3, ease: EASE }}
-                    />
-                  )}
-                </button>
-              </li>
-            ))}
-          </ul>
-          <button
-            onClick={openPalette}
-            className="inner-glow-hover flex items-center gap-1.5 rounded-md border border-line px-2 py-1 font-mono text-[12px] text-text-dim transition-colors hover:border-phosphor-dim hover:text-text"
-            aria-label="Open command palette"
+        <div className="hidden items-center gap-1 md:flex">
+          {sections.map((s) => (
+            <button
+              key={s.id}
+              onClick={() => handleNav(s.id)}
+              className={`relative rounded-md px-3 py-1.5 text-[13px] font-medium transition-colors ${
+                active === s.id ? "text-text" : "text-text-muted hover:text-text"
+              }`}
+              aria-current={active === s.id ? "true" : undefined}
+            >
+              {s.label}
+              {active === s.id && (
+                <motion.span
+                  layoutId="nav-active"
+                  className="absolute inset-0 -z-10 rounded-md bg-surface"
+                  transition={{ duration: 0.3, ease: EASE }}
+                />
+              )}
+            </button>
+          ))}
+          <a
+            href={site.resume}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ml-2 inline-flex items-center gap-1.5 rounded-md border border-line-strong px-3 py-1.5 text-[13px] font-medium text-text transition-colors hover:border-accent hover:text-accent"
           >
-            <Command size={13} />
-            <span>⌘K</span>
-          </button>
+            <Download size={14} />
+            Résumé
+          </a>
         </div>
 
         {/* mobile toggle */}
         <button
           onClick={() => setMenuOpen((v) => !v)}
-          className="flex items-center gap-1.5 font-mono text-[12px] text-text-dim md:hidden"
+          className="flex h-9 w-9 items-center justify-center rounded-md border border-line text-text md:hidden"
           aria-expanded={menuOpen}
           aria-label="Toggle menu"
         >
-          {menuOpen ? <X size={16} /> : <Menu size={16} />}
-          <span>[ menu ]</span>
+          {menuOpen ? <X size={18} /> : <Menu size={18} />}
         </button>
       </nav>
 
@@ -122,7 +126,7 @@ export function Nav() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2, ease: EASE }}
-            className="fixed inset-0 top-14 z-40 bg-ink md:hidden"
+            className="fixed inset-0 top-16 z-40 bg-bg md:hidden"
           >
             <ul className="flex flex-col gap-1 px-6 py-8">
               {sections.map((s, i) => (
@@ -134,10 +138,10 @@ export function Nav() {
                 >
                   <button
                     onClick={() => handleNav(s.id)}
-                    className="flex w-full items-baseline gap-3 py-3 text-left"
+                    className="flex w-full items-center gap-4 border-b border-line py-4 text-left"
                   >
-                    <span className="mono-label">{s.path}</span>
-                    <span className="font-display text-2xl text-text">{s.label}</span>
+                    <span className="font-mono text-xs text-accent">{s.n}</span>
+                    <span className="font-display text-xl text-text">{s.label}</span>
                   </button>
                 </motion.li>
               ))}
@@ -145,17 +149,16 @@ export function Nav() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.04 * sections.length + 0.05, duration: 0.3, ease: EASE }}
-                className="mt-4"
+                className="mt-6"
               >
-                <button
-                  onClick={() => {
-                    setMenuOpen(false);
-                    openPalette();
-                  }}
-                  className="flex items-center gap-2 font-mono text-sm text-phosphor"
+                <a
+                  href={site.resume}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-accent-ink"
                 >
-                  <Command size={15} /> command palette · ⌘K
-                </button>
+                  <Download size={16} /> Download résumé
+                </a>
               </motion.li>
             </ul>
           </motion.div>

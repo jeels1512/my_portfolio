@@ -58,6 +58,25 @@ export function Github({ className, size = 16 }: IconProps) {
   );
 }
 
+export function Linkedin({ className, size = 16 }: IconProps) {
+  return (
+    <svg {...base(size)} className={className}>
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6Z" />
+      <rect x="2" y="9" width="4" height="12" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  );
+}
+
+export function Mail({ className, size = 16 }: IconProps) {
+  return (
+    <svg {...base(size)} className={className}>
+      <rect x="2" y="4" width="20" height="16" rx="2" />
+      <path d="m2 7 10 6 10-6" />
+    </svg>
+  );
+}
+
 export function Download({ className, size = 16 }: IconProps) {
   return (
     <svg {...base(size)} className={className}>
@@ -66,11 +85,28 @@ export function Download({ className, size = 16 }: IconProps) {
   );
 }
 
-export function Command({ className, size = 16 }: IconProps) {
+export function MapPin({ className, size = 16 }: IconProps) {
   return (
     <svg {...base(size)} className={className}>
-      <path d="M15 6a3 3 0 1 1 3 3h-3V6ZM9 6a3 3 0 1 0-3 3h3V6Zm0 12a3 3 0 1 1-3-3h3v3Zm6 0a3 3 0 1 0 3-3h-3v3Z" />
-      <rect x="9" y="9" width="6" height="6" />
+      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+      <circle cx="12" cy="10" r="3" />
+    </svg>
+  );
+}
+
+export function Shield({ className, size = 16 }: IconProps) {
+  return (
+    <svg {...base(size)} className={className}>
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
+      <path d="m9 12 2 2 4-4" />
+    </svg>
+  );
+}
+
+export function Terminal({ className, size = 16 }: IconProps) {
+  return (
+    <svg {...base(size)} className={className}>
+      <path d="m4 17 6-5-6-5M12 19h8" />
     </svg>
   );
 }
