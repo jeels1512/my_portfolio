@@ -2,35 +2,42 @@ import { Reveal, RevealItem } from "./Reveal";
 
 interface SectionProps {
   id: string;
-  path: string; // mono eyebrow, e.g. "~/labs"
+  n: string; // section number, e.g. "02"
+  eyebrow: string;
   title: string;
   intro?: string;
   children: React.ReactNode;
 }
 
-// Standard section shell: mono path eyebrow + Space Grotesk heading.
-export function Section({ id, path, title, intro, children }: SectionProps) {
+// Standard section shell: numbered accent eyebrow + heading.
+export function Section({ id, n, eyebrow, title, intro, children }: SectionProps) {
   return (
     <section
       id={id}
-      className="mx-auto w-full max-w-5xl scroll-mt-20 px-6 py-20 md:py-28"
+      className="mx-auto w-full max-w-5xl scroll-mt-24 px-6 py-20 md:py-28"
       aria-labelledby={`${id}-title`}
     >
-      <Reveal className="mb-10 md:mb-14">
+      <Reveal className="mb-12 md:mb-16">
         <RevealItem>
-          <p className="mono-label">{path}</p>
+          <div className="flex items-center gap-3">
+            <span className="eyebrow">{eyebrow}</span>
+            <span className="h-px flex-1 bg-line" aria-hidden="true" />
+            <span className="font-mono text-xs text-text-dim">{n}</span>
+          </div>
         </RevealItem>
         <RevealItem>
           <h2
             id={`${id}-title`}
-            className="mt-3 font-display text-3xl font-medium tracking-tight text-text md:text-4xl"
+            className="mt-4 font-display text-3xl font-semibold tracking-tight text-text md:text-[40px] md:leading-tight"
           >
             {title}
           </h2>
         </RevealItem>
         {intro && (
           <RevealItem>
-            <p className="mt-4 max-w-2xl text-text-dim">{intro}</p>
+            <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-text-muted md:text-base">
+              {intro}
+            </p>
           </RevealItem>
         )}
       </Reveal>

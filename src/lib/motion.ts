@@ -1,6 +1,6 @@
 // Shared motion constants — one easing everywhere.
 
-export const EASE = [0.16, 1, 0.3, 1] as const;
+export const EASE = [0.22, 1, 0.36, 1] as const;
 
 export const DUR = {
   micro: 0.15,

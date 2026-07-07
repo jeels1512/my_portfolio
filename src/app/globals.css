@@ -1,45 +1,41 @@
 @import "tailwindcss";
 
 /* ============================================================
-   Phosphor Recon — design tokens
+   Modern dark & polished — navy + teal
    ============================================================ */
 :root {
-  --ink: #0b0e11;
-  --ink-raise: #12161b;
-  --line: #232a31;
-  --phosphor: #ffb454;
-  --phosphor-dim: #8a6430;
-  --signal: #5fd7a7;
-  --text: #e8e6e1;
-  --text-dim: #9ba3ab;
-  --danger: #e06c60;
+  --bg: #0a0f1c; /* deep navy-slate page background */
+  --bg-elev: #0e1526; /* raised sections */
+  --surface: #111a2e; /* cards / panels */
+  --surface-hover: #16223a;
+  --line: #1e293b; /* hairline borders */
+  --line-strong: #2b3a52;
 
-  --ease: cubic-bezier(0.16, 1, 0.3, 1);
-}
+  --text: #e6edf6; /* primary text (cool off-white) */
+  --text-muted: #94a6c0; /* secondary text */
+  --text-dim: #647089; /* tertiary / labels */
 
-/* Light "paper" variant — toggled via the palette `theme` command */
-:root[data-theme="paper"] {
-  --ink: #f2eee6;
-  --ink-raise: #e8e2d6;
-  --line: #d2c8b6;
-  --phosphor: #b26a00;
-  --phosphor-dim: #a8874a;
-  --signal: #1f9d6a;
-  --text: #1a1712;
-  --text-dim: #5c564c;
-  --danger: #c0463a;
+  --accent: #2dd4bf; /* teal — single accent */
+  --accent-strong: #5eead4; /* hover / bright */
+  --accent-soft: rgba(45, 212, 191, 0.12);
+  --accent-ink: #04211d; /* text on accent fills */
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @theme inline {
-  --color-ink: var(--ink);
-  --color-ink-raise: var(--ink-raise);
+  --color-bg: var(--bg);
+  --color-bg-elev: var(--bg-elev);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
   --color-line: var(--line);
-  --color-phosphor: var(--phosphor);
-  --color-phosphor-dim: var(--phosphor-dim);
-  --color-signal: var(--signal);
+  --color-line-strong: var(--line-strong);
   --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
   --color-text-dim: var(--text-dim);
-  --color-danger: var(--danger);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-ink: var(--accent-ink);
 
   --font-display: var(--font-space-grotesk);
   --font-body: var(--font-inter);
@@ -56,13 +52,13 @@ html {
 }
 
 body {
-  background-color: var(--ink);
+  background-color: var(--bg);
   color: var(--text);
   font-family: var(--font-body), system-ui, sans-serif;
-  font-feature-settings: "ss01";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  line-height: 1.6;
 }
 
 /* Lenis */
@@ -77,81 +73,56 @@ html.lenis body {
   overflow: hidden;
 }
 
-/* ---- Mono eyebrow / label convention ---- */
-.mono-label {
+/* small uppercase eyebrow label */
+.eyebrow {
   font-family: var(--font-mono), monospace;
   text-transform: uppercase;
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  color: var(--phosphor-dim);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  font-weight: 500;
 }
 
-/* ---- Focus rings ---- */
+/* focus rings */
 :focus-visible {
-  outline: 2px solid var(--phosphor);
-  outline-offset: 2px;
-  border-radius: 2px;
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
-/* ---- CRT scanline + vignette overlay ---- */
-.crt-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  pointer-events: none;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    rgba(255, 180, 84, 0.03) 0px,
-    rgba(255, 180, 84, 0.03) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  mix-blend-mode: overlay;
-}
-.crt-overlay::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.28) 100%);
+/* subtle gradient text for headings when wanted */
+.text-gradient {
+  background: linear-gradient(180deg, var(--text) 30%, var(--text-muted) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-@media (max-width: 768px) {
-  .crt-overlay {
-    display: none;
-  }
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
 }
 
-/* hover inner glow */
-.inner-glow-hover:hover {
-  box-shadow: inset 0 1px 0 rgba(255, 180, 84, 0.06);
+/* thin scrollbar */
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 8px;
+  border: 3px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-dim);
 }
 
-/* status dot pulse */
-@keyframes phosphor-pulse {
-  0%,
-  100% {
-    opacity: 1;
-    box-shadow: 0 0 0 0 currentColor;
-  }
-  50% {
-    opacity: 0.55;
-    box-shadow: 0 0 6px 0 currentColor;
-  }
-}
-.pulse-dot {
-  animation: phosphor-pulse 2s var(--ease) infinite;
-}
-
-/* ---- Reduced motion: strip everything decorative ---- */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
-  }
-  .crt-overlay {
-    display: none !important;
-  }
-  .pulse-dot {
-    animation: none !important;
   }
   *,
   *::before,
@@ -160,26 +131,4 @@ html.lenis body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
-}
-
-/* selection */
-::selection {
-  background: var(--phosphor);
-  color: var(--ink);
-}
-
-/* thin scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-::-webkit-scrollbar-track {
-  background: var(--ink);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--line);
-  border-radius: 6px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--phosphor-dim);
 }
